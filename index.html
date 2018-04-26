@@ -2,8 +2,12 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>d3 choropleth map</title>
+    <link href="https://fonts.googleapis.com/css?family=Open+Sans" rel="stylesheet">
+    <title>HI map</title>
     <style>
+      body {
+        background-color: rgba(241,241,241);
+      }
       #wrapper {
           width: 960px;
           margin: -30px auto 0;
@@ -12,6 +16,18 @@
           width: 960px;
           height: 580px;
           position: relative;
+      }
+      #text {
+        margin-left: 100px;
+        margin-right: 100px;
+       font-family: 'Open Sans', sans-serif;
+      }
+      #title {
+        margin-left: 100px;
+        margin-right: 100px;
+        font-family: 'Open Sans', sans-serif;
+        color: #781712;
+        text-align: center;
       }
       .stroke {
         fill: none;
@@ -45,19 +61,33 @@
       }
       #play, #clock {
       	position: absolute;
-      	top: 15px;
+      	top: 180px;
       }
       #play {
       	left: 15px;
       }
       #clock {
-      	left: 65px;
+      	left: 105px;
+      }
+      #play {
+        padding-left: 20px;
+        padding-right: 20px;
+        padding-top: 10px;
+        padding-bottom: 10px;
+        text-align: center;
+        background-color: steelblue;
+        border-radius: 10px;
       }
     </style>
 </head>
 
 <body>
-
+  <div>
+    <h1 id="title">La carte des interventions de HI</h1>
+  </div>
+  <div>
+    <p id="text">La carte présentée ici est très jolie, maintenant il va falloir la faire fonctionner pour que tout ça soit parfait. On y est pas encore, mais au moins on a un rendu. Il faut bien débuter quelque part. Alors par où commencer, déjà essayer de créer un jeu de données clean. Mais ça ne va pas être simple. Ensuite essayer de faire en sorte que les données s'affichent correctement, après ça ? On a le temps de voir alphonse !</p>
+  </div>
 	<div id="wrapper">	
    		<div id="map"></div>
       <button id="play">play</button>
@@ -189,16 +219,18 @@ function getDataRange() {
   // function loops through all the data values from the current data attribute
   // and returns the min and max values
 
-  var min = Infinity, max = -Infinity;  
+  var min = 3, max = 0;  
   d3.selectAll('.country')
     .each(function(d,i) {
       var currentValue = d.properties[attributeArray[currentAttribute]];
-      if(currentValue <= min && currentValue != -99 && currentValue != 'undefined') {
-        min = currentValue;
-      }
-      if(currentValue >= max && currentValue != -99 && currentValue != 'undefined') {
-        max = currentValue;
-      }
+        if(currentValue <= min && currentValue != -0 && currentValue != 'undefined') {
+          min = currentValue;
+        }
+        if(currentValue >= max && currentValue != -1 && currentValue != 'undefined') {
+          max = currentValue;
+        }
+        if(currentValue ==0){min =currentValue;
+        }
   });
   return [min,max];  //boomsauce
 }
@@ -217,7 +249,7 @@ function animateMap() {
           }
           sequenceMap();  // update the representation of the map 
           d3.select('#clock').html(attributeArray[currentAttribute]);  // update the clock
-        }, 2000);
+        }, 1200);
       
         d3.select(this).html('stop');  // change the button label to stop
         playing = true;   // change the status of the animation
